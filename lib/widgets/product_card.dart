@@ -1,9 +1,11 @@
 import 'package:class_todo_app/models/product.dart';
+import 'package:class_todo_app/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // 상품 하나를 표시하는 재사용 가능한 카드 위젯 입니다
 
-class ProductCard extends StatelessWidget {
+class ProductCard extends ConsumerWidget {
   final Product product;
 
   const ProductCard({
@@ -12,7 +14,7 @@ class ProductCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       elevation: 4,
       clipBehavior: Clip.antiAlias, // Card 경계 밖으로 내용이 나가는 것을 방지
@@ -48,7 +50,10 @@ class ProductCard extends StatelessWidget {
                     children: [
                       Text('${product.price}'),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          // 창고 관리자에 접근해서 상품을 추가해 달라고 요청
+                          ref.read(cartProvider.notifier).addProduct(product);
+                        },
                         child: Text('추가'),
                       )
                     ],

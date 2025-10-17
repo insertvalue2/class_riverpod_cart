@@ -1,3 +1,5 @@
+import 'package:class_todo_app/providers/cart_provider.dart';
+import 'package:class_todo_app/screens/cart_screen.dart';
 import 'package:class_todo_app/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,10 +14,45 @@ class ProductListScreen extends ConsumerWidget {
     // ref.watch(provider) 계속 지켜 보다가 객체 상태가 변경 되면 자동으로 build 호출 됨
     // ref.read(); // 한번만 읽을 때 사용
     final productList = ref.watch(productListProvider);
+    final cartItemCount = ref.watch(cartItemCountProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('상품 목록'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        actions: [
+          Stack(
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CartScreen(),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.shopping_cart),
+                iconSize: 28,
+              ),
+              Positioned(
+                right: 8,
+                top: 1,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    '$cartItemCount',
+                    style: const TextStyle(color: Colors.white, fontSize: 12),
+                  ),
+                ),
+              )
+            ],
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
